@@ -56,9 +56,9 @@ def scrape(endpoint) :
                 'city': city.string,
                 'index': index,
                 'wind_dir': wind_dir,
-                'wind': wind,
+                'wind_spd': wind,
                 'pressure': pressure,
-                'time': time
+                'last_update': time
             })
 
         else:
@@ -73,7 +73,7 @@ for endpoint in endpoints:
 # Write the extracted data to a CSV file
 iter = 0
 with open('airQualityData.csv', mode='w') as csv_file:
-    fieldnames = ['city', 'index', 'wind_dir', 'wind', 'pressure', 'time']
+    fieldnames = ['city', 'index', 'wind_dir', 'wind_spd', 'pressure', 'last_update']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     try:
         writer.writeheader()
@@ -81,5 +81,6 @@ with open('airQualityData.csv', mode='w') as csv_file:
             writer.writerow(data)
             iter += 1
         print("Successfully wrote " + str(iter) + " rows to CSV file.")
-    except:
+    except csv.Error as e:
         print("Error writing to CSV file.")
+        print(e)
