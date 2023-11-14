@@ -3,12 +3,16 @@ Code to scrape IQAir's website and obtain air quality data.
 
 ## Example Output
 
-|   city          | index |         wind_dir          |  wind_spd | pressure |     last_update      |
-| ---------------  | ----- | ------------------------- | --------- | -------- | -------------------  |
-| Jakarta          | 137   | Angin berputar 11 derajat | 7.4 km/h  | 1012 mbar | 04:00, Nov 9         |
-| Yogyakarta       | 60*   | Angin berputar 192 derajat| 1.4 km/h  | 1012 mbar | 04:00, Nov 9         |
-| Kota Bandung     | 164   | Angin berputar 9 derajat  | 1.6 km/h  | 1013 mbar | 04:00, Nov 9         |
-| Salatiga         | 92*   | Angin berputar 76 derajat | 6.9 km/h  | 1012 mbar | 04:00, Nov 9         |
-| Kota Semarang    | 141   | Angin berputar 348 derajat| 1.8 km/h  | 1009 mbar | 03:00, Nov 9         |
-| Kota Surakarta   | 83    | Angin berputar 204 derajat| 12.2 km/h | 1011 mbar | 04:00, Nov 9         |
+| id                                | city          | iqa | wind_dir(deg)         | wind_spd(km/h) | pressure(mbar) | last_update           |
+| --------------------------------- | ------------- | --- | --------------------- | -------------- | -------------- | --------------------- |
+| Jakarta_2023-11-14T17:39:24      | Jakarta       | 86  | Angin berputar 358 derajat | 14.8 km/h      | 1010 mbar      | 2023-11-14 17:39:24  |
+| Yogyakarta_2023-11-14T17:39:24   | Yogyakarta    | 41* | Angin berputar 171 derajat | 13.2 km/h      | 1010 mbar      | 2023-11-14 17:39:24  |
+| Sleman_2023-11-14T17:39:24        | Sleman        | 68  | Angin berputar 185 derajat | 10.9 km/h      | 1010 mbar      | 2023-11-14 17:39:24  |
+| Bandung_2023-11-14T17:39:24       | Bandung       | 102 | Angin berputar 4 derajat   | 2.9 km/h       | 1011 mbar      | 2023-11-14 17:39:24  |
+| Salatiga_2023-11-14T17:39:24      | Salatiga      | 66* | Angin berputar 90 derajat  | 1.2 km/h       | 1010 mbar      | 2023-11-14 17:39:24  |
+| Semarang_2023-11-14T17:39:24      | Semarang      | 96  | Angin berputar 329 derajat | 14.8 km/h      | 1008 mbar      | 2023-11-14 17:39:24  |
+| Surakarta_2023-11-14T17:39:24     | Surakarta     | 53* | Angin berputar 214 derajat | 10.3 km/h      | 1009 mbar      | 2023-11-14 17:39:24  |
+| Banda Aceh_2023-11-14T17:39:24    | Banda Aceh    | 23  | Angin berputar 234 derajat | 17.6 km/h      | 1010 mbar      | 2023-11-14 17:39:24  |
+| ...                               | ...           | ... | ...                   | ...            | ...            | ...                   |
+
 

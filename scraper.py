@@ -1,22 +1,30 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+from datetime import datetime
 
 # list endpoints to scrape
 endpoints = [
     '/jakarta',
     '/yogyakarta',
+    '/yogyakarta/sleman',
     '/west-java/bandung',
     '/central-java/salatiga',
     '/central-java/semarang',
     '/central-java/surakarta',
+    '/aceh/banda-aceh',
 ]
 
 # Base URL of IQAir website
 url = 'https://www.iqair.com/id/indonesia'
 dataBuffer = []
 
-def scrape(endpoint) :
+def format_id(kota, date):
+    date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+    formatted_date = date_obj.isoformat()
+    return kota + "_" + formatted_date
+
+def scrape(endpoint, time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
     response = requests.get(url + endpoint)
     print("Scraping " + url + endpoint)
     # Check if the request was successful (status code 200)
@@ -24,10 +32,11 @@ def scrape(endpoint) :
         if response.status_code == 200:
         # Parse HTML content
             soup = BeautifulSoup(response.text, 'html.parser')
-        
             title = soup.find('h1', class_='pagetitle__title').contents[0]
             index = soup.find('p', class_='aqi-value__value').contents[0]
-            city = soup.find('a', class_="breadcrumb__item is-active")
+            city = soup.find('a', class_="breadcrumb__item is-active").get_text()
+            city = city.replace("Kota ", "").replace("Kab. ", "")
+            city = city.strip()
             table_element = soup.find('table', attrs={'_ngcontent-airvisual-web-c224': ""})
             wind = "0 km/h"
             pressure = "0 mbar"
@@ -36,7 +45,6 @@ def scrape(endpoint) :
                     pressure = td.text
                 if ("km/h" in td.text):
                     wind = td.text
-            time = soup.find('time').string.strip()
             icon_parent = soup.find('img', class_="forecast-wind_icon")
             wind_dir = icon_parent.get('alt')
             
@@ -44,7 +52,7 @@ def scrape(endpoint) :
             print("=====================================")
             print('Title:', title)
             print('Index:', index)
-            print('City:', city.string)
+            print('City:', city)
             print('Wind Direction:', wind_dir)
             print('Wind Speed:', wind)
             print('Wind Pressure:', pressure)
@@ -53,11 +61,12 @@ def scrape(endpoint) :
 
             # append to buffer
             dataBuffer.append({
-                'city': city.string,
-                'index': index,
-                'wind_dir': wind_dir,
-                'wind_spd': wind,
-                'pressure': pressure,
+                'id': format_id(city, time),
+                'city': city,
+                'iqa': index,
+                'wind_dir(deg)': wind_dir,
+                'wind_spd(km/h)': wind,
+                'pressure(mbar)': pressure,
                 'last_update': time
             })
 
@@ -73,7 +82,7 @@ for endpoint in endpoints:
 # Write the extracted data to a CSV file
 iter = 0
 with open('airQualityData.csv', mode='w') as csv_file:
-    fieldnames = ['city', 'index', 'wind_dir', 'wind_spd', 'pressure', 'last_update']
+    fieldnames = ['id', 'city', 'iqa', 'wind_dir(deg)', 'wind_spd(km/h)', 'pressure(mbar)', 'last_update']
     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     try:
         writer.writeheader()
